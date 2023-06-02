@@ -17,8 +17,8 @@
 	</div>
 
 	<div>
-		<label for="rumble_url">Rumble URL:</label>
-		<input type="text" id="rumble_url" name="rumble_url">
+		<label for="rumble_channel_url">Rumble Channel URL:</label>
+		<input type="text" id="rumble_channel_url" name="rumble_channel_url">
 		<input type="submit" id="submit" name="submit" value="Get Data">
 	</div>
 

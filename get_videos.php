@@ -1,17 +1,29 @@
 <?php
 
 require('helper_functions.php');
+require('./classes/Rumble_Channel.php');
 
-if ( isset ( $_GET['url'] ) ) {
 
-    $url = $_GET['url'];
+if ( isset( $_GET['rumble_channel_url'] ) ) {
 
-    $video_items = get_video_items( $url );
+    $url = $_GET['rumble_channel_url'];
+
+    $rumble_channel = new Rumble_Channel( $url );
+
+    $rumble_channel->set_video_items();
+
+    $video_items = $rumble_channel->get_video_items();
+
+    if ( empty( $video_items ) ) {
+
+        echo json_encode( 'No video items.' );
+        return;
+    }
 
     $videos = array();
     foreach ($video_items as $video_item) {
 
-        $html = $video_item['html'];
+        $html = $video_item;
 
         $videos[] = array(
             'url'       => get_video_url( $html ),
@@ -29,7 +41,7 @@ if ( isset ( $_GET['url'] ) ) {
     return;
 }
 
-echo json_encode( 'url is not set' );
+echo json_encode( 'rumble_channel is not set' );
 return;
 
 

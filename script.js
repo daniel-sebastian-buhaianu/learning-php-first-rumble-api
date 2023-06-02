@@ -2,15 +2,15 @@ $(document).ready( function() {
 
 	$("#submit").click( function() {
 
-		const rumbleUrl = $("#rumble_url").val();
+		const rumbleChannelUrl = $("#rumble_channel_url").val();
 
 		$("#loader-container").show();
 
-		$.get( `get_videos.php?url=${ rumble_url }`, function( response ) {
+		$.get( `get_videos.php?rumble_channel_url=${ rumbleChannelUrl }`, function( response ) {
 
 	  		const resp = JSON.parse( response );
 
-	  		console.log('resp', response);
+	  		console.log('resp', resp );
 
 			$("#loader-container").hide();
 		} );
