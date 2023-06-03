@@ -2,23 +2,22 @@
 
 class Rumble_Channel {
 
-	public $url;
-
+	private $url;
 	private $dom;
 	private $video_items;
 
 	public function __construct( $channel_url ) {
-
+		
 		$this->url  = $channel_url;
-		$this->dom  = get_dom( $this->url );
+		$this->dom  = get_dom_from_url( $channel_url );
+
 	}
 
-	public function set_video_items() {
+	public function load() {
 
 		if ( null === $this->dom ) {
 
 			$this->video_items = null;
-
 			return;
 		}
 
@@ -38,21 +37,32 @@ class Rumble_Channel {
 	    }
 
 	    $this->video_items = $video_items;
-
 	    return;
 	}
 
-	public function get_video_items() {
+	public function get( $property ) {
 
-		return $this->video_items;
+		switch ( $property ) {
+
+			case 'url':
+				return $this->url;
+
+			case 'dom':
+				return $this->dom;
+
+			case 'video_items':
+				return $this->video_items;
+
+			default:
+				return "Property '$property' doesn't exist in Rumble_Channel";
+		}
 	}
 
 	public function print_video_items() {
 
-		if ( empty( $this->video_items ) ) {
+		if ( null === $this->video_items ) {
 
 			echo 'Nothing to print';
-
 			return;
 		}
 
@@ -64,38 +74,22 @@ class Rumble_Channel {
 
 		return;
 	}
-}
 
-function get_dom( $url ) {
+	public function print() {
 
-	$ch = curl_init();
+		echo '<h3>Rumble_Channel Properties</h3>';
 
-    curl_setopt( $ch, CURLOPT_URL, $url );
-    curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+		echo '<h4>url</h4>';
+		echo print_r( $this->url );
+		echo '<br><br>';
 
-    $response = curl_exec( $ch );
+		echo '<h4>dom</h4>';
+		echo print_r( $this->dom );
+		echo '<br><br>';
 
-    if ( empty( $response ) ) {
+		echo '<h4>video_items</h4>';
+		$this->print_video_items();
 
-    	return null;
-    }
-
-    if ( curl_errno( $ch ) ) {
-
-    	curl_close( $ch );
-
-    	return null;
-    }
-
-    curl_close( $ch );
-
-    $dom = new DOMDocument();
-
-    libxml_use_internal_errors( true );
-
-    $dom->loadHTML( $response );
-
-    libxml_use_internal_errors( false );
-
-    return $dom;
+		return;
+	}
 }
