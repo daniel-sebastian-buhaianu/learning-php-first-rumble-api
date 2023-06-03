@@ -62,7 +62,7 @@ class Rumble_Channel {
 
 		if ( null === $this->video_items ) {
 
-			echo 'Nothing to print';
+			echo 'No video items';
 			return;
 		}
 
