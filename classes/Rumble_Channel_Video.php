@@ -2,16 +2,20 @@
 
 class Rumble_Channel_Video {
 
-	public $class_name = 'Rumble_Channel_Video';
+	// unavailable in $this->get_all()
+	public $class_name = 'Rumble_Channel_Video';	
 
-	private $html;
-
+	// available in $this->get_all()
 	private $url;       
     private $title;     
     private $thumbnail; 
     private $uploaded_at;
     private $votes;
     private $counters;
+
+	// unavailable in $this->get_all()
+	private $html;
+
 
     public function __construct( $html_video_item ) {
 
@@ -149,6 +153,12 @@ class Rumble_Channel_Video {
 	public function get( $property ) {
 
 		switch ( $property ) {
+
+			case 'class_name':
+				return $this->class_name;
+
+			case 'html':
+				return $this->html;
 
 			case 'url':
 				return $this->url;

@@ -2,13 +2,16 @@
 
 class Rumble_Channel_Page {
 
-	public $class_name = 'Rumble_Channel_Page';
-
-	private $url;
+	// unavailable in $this->get_all;
+	private $class_name = 'Rumble_Channel_Page';
 	private $dom;
 	private $video_items;
+
+	// 'gettable' in $this->get_all;
+	private $url;
 	private $current_page_index;
 	private $last_page_index;
+
 
 	public function __construct( $channel_url ) {
 		
@@ -54,11 +57,23 @@ class Rumble_Channel_Page {
 
 	public function load_last_page_index() {
 
+		if ( null === $this->dom ) {
+
+			$this->last_page_index = null;
+			return;
+		}
+
 		$xpath = new DOMXPath( $this->dom );
 
 	    $elements = $xpath->query( '//a[@class="paginator--link"]' );
 
 	   	$target = $elements->item( $elements->count() - 1 );
+
+	   	if ( null === $target ) {
+
+	   		$this->last_page_index = null;
+	   		return;
+	   	}
 
 	   	$url = 'https://rumble.com' . $target->getAttribute( 'href' );
 
@@ -73,9 +88,6 @@ class Rumble_Channel_Page {
 
 			case 'url':
 				return $this->url;
-
-			case 'dom':
-				return $this->dom;
 
 			case 'video_items':
 				return $this->video_items;
@@ -95,10 +107,8 @@ class Rumble_Channel_Page {
 
 		return array(
 			'url'                => $this->url,
-			'dom'                => $this->title,
-			'video_items'        => $this->thumbnail,
-			'current_page_index' => $this->uploaded_at,
-			'last_page_index'    => $this->votes,
+			'current_page_index' => $this->current_page_index,
+			'last_page_index'    => $this->last_page_index,
 		);
 	}
 
@@ -125,10 +135,6 @@ class Rumble_Channel_Page {
 
 		echo '<h4>url</h4>';
 		print_r( $this->url );
-		echo '<br><br>';
-
-		echo '<h4>dom</h4>';
-		print_r( $this->dom );
 		echo '<br><br>';
 
 		echo '<h4>video_items</h4>';

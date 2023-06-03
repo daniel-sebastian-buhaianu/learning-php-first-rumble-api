@@ -6,7 +6,7 @@ $(document).ready( function() {
 
 		$("#loader-container").show();
 
-		$.get( `get_videos.php?rumble_channel_url=${ rumbleChannelUrl }`, function( response ) {
+		$.get( `rumble_api.php?rumble_channel_url=${ rumbleChannelUrl }`, function( response ) {
 
 	  		const resp = JSON.parse( response );
 
