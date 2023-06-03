@@ -1,6 +1,8 @@
 <?php
 
-class Rumble_Video {
+class Rumble_Channel_Video {
+
+	public $class_name = 'Rumble_Channel_Video';
 
 	private $html;
 
@@ -167,7 +169,7 @@ class Rumble_Video {
 				return $this->counters;
 
 			default:
-				return "Property '$property' doesn't exist in Rumble_Video";
+				return "Property '$property' doesn't exist in " . $this->class_name;
 		}
 	}
 
@@ -185,34 +187,34 @@ class Rumble_Video {
 
 	public function print() {
 
-		echo '<h3>Rumble_Video Properties</h3>';
+		echo '<h3>' . $this->class_name . ' Properties</h3>';
 
 		echo '<h4>html</h4>';
-		echo print_r( $this->html );
+		print_r( $this->html );
 		echo '<br><br>';
 
 		echo '<h4>url</h4>';
-		echo print_r( $this->url );
+		print_r( $this->url );
 		echo '<br><br>';
 
 		echo '<h4>title</h4>';
-		echo print_r( $this->title );
+		print_r( $this->title );
 		echo '<br><br>';
 
 		echo '<h4>thumbnail</h4>';
-		echo print_r( $this->thumbnail );
+		print_r( $this->thumbnail );
 		echo '<br><br>';
 
 		echo '<h4>uploaded_at</h4>';
-		echo print_r( $this->uploaded_at );
+		print_r( $this->uploaded_at );
 		echo '<br><br>';
 
 		echo '<h4>votes</h4>';
-		echo print_r( $this->votes );
+		print_r( $this->votes );
 		echo '<br><br>';
 
 		echo '<h4>counters</h4>';
-		echo print_r( $this->counters );
+		print_r( $this->counters );
 		echo '<br><br>';
 
 		return;

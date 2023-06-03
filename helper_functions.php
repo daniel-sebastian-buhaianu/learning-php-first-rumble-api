@@ -46,3 +46,18 @@ function get_dom_from_url( $url ) {
 
     return $dom;
 }
+
+function get_query_param( $url, $param ) {
+
+    $query_string = parse_url( $url, PHP_URL_QUERY );
+
+    parse_str( $query_string, $params );
+
+    if ( isset( $params[ $param ] ) ) {
+
+    return $params[ $param ];
+
+    }
+
+    return null;
+}
