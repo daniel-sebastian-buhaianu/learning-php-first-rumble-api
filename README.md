@@ -7,45 +7,39 @@ Retrieves useful information about a Rumble channel.
 - [Project Title](#project-title)
 - [Description](#description)
 - [Features](#features)
-- [Installation](#installation)
 - [Usage](#usage)
-- [Contributing](#contributing)
-- [License](#license)
 
 ## Description
 
 Provide a more detailed overview of your project, explaining its purpose and any relevant background information.
 
+Since I couldn't find a Rumble API to retrieve information about a particular Rumble Channel, I decided to build one.
+
+This simple Rumble API allows you to get useful data of a particular Rumble Channel, such a channel id, number of pages, useful information about all videos uploaded by that channel, and more!
+
+All you need to do is provide the Rumble Channel URL, such as: https://rumble.com/c/TateSpeech
+
 ## Features
 
-- List the key features or functionality of your project.
-
-## Installation
-
-1. Provide step-by-step instructions on how to install and set up your project.
-2. Include any dependencies or prerequisites that need to be installed beforehand.
+- Allows you to get useful information about a particular Rumble Channel, such as:
+  - url
+  - channel_id
+  - pages_count
+  - pages_data
+    - page_url
+    - current_page_index
+    - last_page_index
+    - videos_data ( url, title, thumbnail, uploaded_at, likes, dislikes, views, comments )
 
 ## Usage
 
-- Explain how to use your project, including any important commands or configurations.
-- Include examples and screenshots if applicable.
-
-## Contributing
-
-- Explain how other developers can contribute to your project.
-- Include guidelines for submitting bug reports, feature requests, or pull requests.
-
-## License
-
-- Specify the license under which your project is distributed.
-- If you're unsure, you can include a link to a file named LICENSE in your repository.
+https://dsb99.app/rumble-api?api_key=YOUR_API_KEY&url=RUMBLE_CHANNEL_URL
 
 ## Acknowledgments
 
-- Mention any contributors, libraries, or resources you'd like to acknowledge or give credit to.
+- Thanks to the PHP team for helping me code this using PHP.
 
 ## Contact
 
-- Provide your contact information or a way for users to reach out to you with questions or feedback.
-- You can include your email address, social media handles, or a link to your website.
+- dsb99.dev@gmail.com
 
