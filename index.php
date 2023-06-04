@@ -35,12 +35,28 @@ if ( isset( $_GET['api_key'] ) ) {
 
 		}
 
-		$rc = new Rumble_Channel( $_GET['url'] );
+		$rc      = new Rumble_Channel( $_GET['url'] );
+
+		header( 'HTTP/1.1 200 OK' );
+		header( 'Content-Type: application/json' );
 
 		$response = $rc->get_all();
 
 		echo json_encode( $response );
-		exit;
+   	 	exit;
+
+	} else {
+
+		header( 'HTTP/1.1 400 Bad Request' );
+		header( 'Content-Type: application/json' );
+
+		$response = array(
+		    'error'   => true,
+		    'message' => 'No rumble channel url provided.'
+		);
+
+		echo json_encode( $response );
+   	 	exit;
 	}
 } else {
 
