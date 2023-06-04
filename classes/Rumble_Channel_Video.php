@@ -32,7 +32,91 @@ class Rumble_Channel_Video {
     	$this->counters    = $this->get_counters_from_xpath( $xpath); 
     }
 
-    private function get_url_from_xpath( $xpath ) {
+    // Methods
+
+	public function get( $property ) {
+
+		switch ( $property ) {
+
+			case 'class_name':
+				return $this->class_name;
+
+			case 'html':
+				return $this->html;
+
+			case 'url':
+				return $this->url;
+
+			case 'title':
+				return $this->title;
+
+			case 'thumbnail':
+				return $this->thumbnail;
+
+			case 'uploaded_at':
+				return $this->uploaded_at;
+
+			case 'votes':
+				return $this->votes;
+
+			case 'counters':
+				return $this->counters;
+
+			default:
+				return "Property '$property' doesn't exist in " . $this->class_name;
+		}
+	}
+
+	public function get_all() {
+
+		return array(
+			'url'         => $this->url,
+			'title'       => $this->title,
+			'thumbnail'   => $this->thumbnail,
+			'uploaded_at' => $this->uploaded_at,
+			'votes'       => $this->votes,
+			'counters'    => $this->counters,
+		);
+	}
+
+	public function print() {
+
+		echo '<h3>' . $this->class_name . ' Properties</h3>';
+
+		echo '<h4>html</h4>';
+		print_r( $this->html );
+		echo '<br><br>';
+
+		echo '<h4>url</h4>';
+		print_r( $this->url );
+		echo '<br><br>';
+
+		echo '<h4>title</h4>';
+		print_r( $this->title );
+		echo '<br><br>';
+
+		echo '<h4>thumbnail</h4>';
+		print_r( $this->thumbnail );
+		echo '<br><br>';
+
+		echo '<h4>uploaded_at</h4>';
+		print_r( $this->uploaded_at );
+		echo '<br><br>';
+
+		echo '<h4>votes</h4>';
+		print_r( $this->votes );
+		echo '<br><br>';
+
+		echo '<h4>counters</h4>';
+		print_r( $this->counters );
+		echo '<br><br>';
+
+		return;
+	}
+
+	// Helpers
+	
+	private function get_url_from_xpath( $xpath ) {
 
 	    $element = $xpath->query( '//a[@class="video-item--a"]' )->item(0);
 
@@ -148,85 +232,5 @@ class Rumble_Channel_Video {
 	    }
 
 	   return null;
-	}
-
-	public function get( $property ) {
-
-		switch ( $property ) {
-
-			case 'class_name':
-				return $this->class_name;
-
-			case 'html':
-				return $this->html;
-
-			case 'url':
-				return $this->url;
-
-			case 'title':
-				return $this->title;
-
-			case 'thumbnail':
-				return $this->thumbnail;
-
-			case 'uploaded_at':
-				return $this->uploaded_at;
-
-			case 'votes':
-				return $this->votes;
-
-			case 'counters':
-				return $this->counters;
-
-			default:
-				return "Property '$property' doesn't exist in " . $this->class_name;
-		}
-	}
-
-	public function get_all() {
-
-		return array(
-			'url'         => $this->url,
-			'title'       => $this->title,
-			'thumbnail'   => $this->thumbnail,
-			'uploaded_at' => $this->uploaded_at,
-			'votes'       => $this->votes,
-			'counters'    => $this->counters,
-		);
-	}
-
-	public function print() {
-
-		echo '<h3>' . $this->class_name . ' Properties</h3>';
-
-		echo '<h4>html</h4>';
-		print_r( $this->html );
-		echo '<br><br>';
-
-		echo '<h4>url</h4>';
-		print_r( $this->url );
-		echo '<br><br>';
-
-		echo '<h4>title</h4>';
-		print_r( $this->title );
-		echo '<br><br>';
-
-		echo '<h4>thumbnail</h4>';
-		print_r( $this->thumbnail );
-		echo '<br><br>';
-
-		echo '<h4>uploaded_at</h4>';
-		print_r( $this->uploaded_at );
-		echo '<br><br>';
-
-		echo '<h4>votes</h4>';
-		print_r( $this->votes );
-		echo '<br><br>';
-
-		echo '<h4>counters</h4>';
-		print_r( $this->counters );
-		echo '<br><br>';
-
-		return;
 	}
 }

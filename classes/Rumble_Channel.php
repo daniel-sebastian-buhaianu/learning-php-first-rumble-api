@@ -11,14 +11,17 @@ class Rumble_Channel {
 	private $pages_count;
 	private $pages_data;
 
+
 	public function __construct( $channel_url ) {
 
 		$this->url         = $channel_url;
-		$this->channel_id  = is_valid_url( $channel_url ) ? get_channel_id( $channel_url ) : null;
-		$this->pages_count = get_pages_count( $this->channel_id );
-		$this->pages_data  = get_pages_data( $this->channel_id, $this->pages_count ); 
+		$this->channel_id  = is_rumble_channel_url_valid( $channel_url ) ? $this->get_channel_id( $channel_url ) : null;
+		$this->pages_count = $this->get_pages_count( $this->channel_id );
+		$this->pages_data  = $this->get_pages_data( $this->channel_id, $this->pages_count ); 
 
 	}
+
+	// Methods
 
 	public function get( $property ) {
 
@@ -76,123 +79,90 @@ class Rumble_Channel {
 
 		return;
 	}
-}
 
-function is_valid_url( $url ) {
+	// Helpers
 
-	$accepted_common_parts = [
-		'https://rumble.com/c/',
-		'https://www.rumble.com/c/',
-		'rumble.com/c/',
-		'www.rumble.com/c/'
-	];
+	private function get_channel_id( $url ) {
 
-	// Check if the URL starts with any of the accepted common parts
-	$starts_with_common_part = false;
-	foreach ( $accepted_common_parts as $common_part ) {
+		$accepted_common_parts = [
+			'https://rumble.com/c/',
+			'https://www.rumble.com/c/',
+			'rumble.com/c/',
+			'www.rumble.com/c/'
+		];
 
-		if ( strpos( $url, $common_part ) === 0 ) {
+		$common_part = '';
+		foreach( $accepted_common_parts as $accepted_common_part ) {
 
-			$starts_with_common_part = true;
-			break;
+			if ( strpos( $url, $accepted_common_part ) === 0 ) {
+
+				$common_part = $accepted_common_part;
+				break;
+			}
 		}
-	}
-	if ( !$starts_with_common_part ) {
-
-		return false;
-	}
-
-	// Get the channel ID part of the URL
-	$channel_id = substr( $url, strlen( $common_part ) );
-
-	// Check if the channel ID contains only alphanumeric characters
-	if ( ! preg_match( '/^[a-zA-Z0-9]+$/', $channel_id ) ) {
-
-		return false;
+		
+		$channel_id = str_replace( $common_part, '', $url );
+	  
+		return $channel_id;
 	}
 
-	return true;
-}
+	private function get_pages_count( $channel_id ) {
 
-function get_channel_id( $url ) {
+		$pages_count = null;
 
-	$accepted_common_parts = [
-		'https://rumble.com/c/',
-		'https://www.rumble.com/c/',
-		'rumble.com/c/',
-		'www.rumble.com/c/'
-	];
+		$url = "https://rumble.com/c/$channel_id";
 
-	$common_part = '';
-	foreach( $accepted_common_parts as $accepted_common_part ) {
+		do {
 
-		if ( strpos( $url, $accepted_common_part ) === 0 ) {
+			$channel_page = new Rumble_Channel_Page( $url );
 
-			$common_part = $accepted_common_part;
-			break;
-		}
+			$channel_page->load_dom();
+			$channel_page->load_last_page_index();
+
+			$current_page_index = intval( $channel_page->get( 'current_page_index') ); 
+			$last_page_index    = intval( $channel_page->get( 'last_page_index' ) );
+
+			if ( $current_page_index - 1 === $last_page_index ) {
+
+				$pages_count = $current_page_index;
+			}
+
+			$url = "https://rumble.com/c/$channel_id?page=$last_page_index";
+
+		} while ( null === $pages_count );
+
+		return $pages_count;
 	}
-	
-	$channel_id = str_replace( $common_part, '', $url );
-  
-	return $channel_id;
-}
 
-function get_pages_count( $channel_id ) {
+	private function get_pages_data( $channel_id, $pages_count ) {
 
-	$pages_count = null;
+		$pages_data  = array();
 
-	$url = "https://rumble.com/c/$channel_id";
+		$channel_url = "https://rumble.com/c/$channel_id";
 
-	do {
+		for ( $i = 1; $i <= $pages_count; $i++ ) {
 
-		$channel_page = new Rumble_Channel_Page( $url );
+			$page_url = $i === 1 ? $channel_url : "$channel_url?page=$i";
 
-		$channel_page->load_dom();
-		$channel_page->load_last_page_index();
+			$page = new Rumble_Channel_Page( $page_url );
 
-		$current_page_index = intval( $channel_page->get( 'current_page_index') ); 
-		$last_page_index    = intval( $channel_page->get( 'last_page_index' ) );
+			$page->load_dom();
+			$page->load_video_items();
+			$page->load_last_page_index();
 
-		if ( $current_page_index - 1 === $last_page_index ) {
+			$video_items = $page->get( 'video_items' );
+			$videos      = array();
+			foreach( $video_items as $video_item ) {
 
-			$pages_count = $current_page_index;
-		}
+				$video    = new Rumble_Channel_video( $video_item );
+				$videos[] = $video->get_all();
+			}
 
-		$url = "https://rumble.com/c/$channel_id?page=$last_page_index";
-
-	} while ( null === $pages_count );
-
-	return $pages_count;
-}
-
-function get_pages_data( $channel_id, $pages_count ) {
-
-	$pages_data  = array();
-
-	$channel_url = "https://rumble.com/c/$channel_id";
-
-	for ( $i = 1; $i <= $pages_count; $i++ ) {
-
-		$page_url = $i === 1 ? $channel_url : "$channel_url?page=$i";
-
-		$page = new Rumble_Channel_Page( $page_url );
-
-		$page->load_dom();
-		$page->load_video_items();
-		$page->load_last_page_index();
-
-		$video_items = $page->get( 'video_items' );
-		$videos      = array();
-		foreach( $video_items as $video_item ) {
-
-			$video    = new Rumble_Channel_video( $video_item );
-			$videos[] = $video->get_all();
+			$pages_data[ $page_url ] = $page->get_all();
+			$pages_data[ $page_url ]['videos_data'] = $videos; 
 		}
 
-		$pages_data[ $page_url ] = $page->get_all();
-		$pages_data[ $page_url ]['videos_data'] = $videos; 
+		return $pages_data;
 	}
-
-	return $pages_data;
 }
+

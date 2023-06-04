@@ -1,27 +1,59 @@
-<?php  
-?>
+<?php
 
-<!DOCTYPE html>
-<html>
-<head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>t8tv</title>
-	<link rel="stylesheet" type="text/css" href="styles.css">
-	<script type="text/javascript" src="jquery.js"></script>
-	<script type="text/javascript" src="script.js"></script>
-</head>
-<body>
-	<div id="loader-container">
-		<div class="loader"></div>
-	</div>
+include 'includes.php';
 
-	<div>
-		<label for="rumble_channel_url">Rumble Channel URL:</label>
-		<input type="text" id="rumble_channel_url" name="rumble_channel_url">
-		<input type="submit" id="submit" name="submit" value="Get Data">
-	</div>
+if ( isset( $_GET['api_key'] ) ) {
 
-	<div id="result"></div>
-</body>
-</html>
+	if ( ! is_api_key_valid( $_GET['api_key'] ) ) {
+
+		header( 'HTTP/1.1 401 Unauthorized' );
+		header( 'Content-Type: application/json' );
+
+		$response = array(
+		    'error'   => true,
+		    'message' => 'Unauthorized access'
+		);
+
+		echo json_encode( $response );
+   	 	exit;
+	}
+
+	if ( isset( $_GET['url'] ) ) {
+
+		if ( ! is_rumble_channel_url_valid( $_GET['url'] ) ) {
+
+			header( 'HTTP/1.1 404 Not Found' );
+			header( 'Content-Type: application/json' );
+
+			$response = array(
+			    'error'   => true,
+			    'message' => 'Could not find rumble channel.'
+			);
+
+			echo json_encode( $response );
+	   	 	exit;
+
+		}
+
+		$rc = new Rumble_Channel( $_GET['url'] );
+
+		$response = $rc->get_all();
+
+		echo json_encode( $response );
+		exit;
+	}
+} else {
+
+	header( 'HTTP/1.1 401 Unauthorized' );
+	header( 'Content-Type: application/json' );
+
+	$response = array(
+	    'error'   => true,
+	    'message' => 'Unauthorized access'
+	);
+
+	echo json_encode( $response );
+	exit;
+
+}
+

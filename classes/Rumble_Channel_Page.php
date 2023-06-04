@@ -16,10 +16,12 @@ class Rumble_Channel_Page {
 	public function __construct( $channel_url ) {
 		
 		$this->url                = $channel_url;
-		$this->current_page_index = get_page_index( $channel_url );
+		$this->current_page_index = $this->get_page_index( $channel_url );
 
 		return;
 	}
+
+	// Methods
 
 	public function load_dom() {
 
@@ -77,7 +79,7 @@ class Rumble_Channel_Page {
 
 	   	$url = 'https://rumble.com' . $target->getAttribute( 'href' );
 
-	   	$this->last_page_index = get_page_index( $url );
+	   	$this->last_page_index = $this->get_page_index( $url );
 
 	   	return;
 	}
@@ -150,16 +152,19 @@ class Rumble_Channel_Page {
 
 		return;
 	}
-}
 
-function get_page_index( $url ) {
+	// Helpers
 
-	$page_index = get_query_param( $url, 'page' );
+	private function get_page_index( $url ) {
 
-	if ( null === $page_index ) {
+		$page_index = get_query_param( $url, 'page' );
 
-		return '1';
+		if ( null === $page_index ) {
+
+			return '1';
+		}
+
+		return $page_index;
 	}
-
-	return $page_index;
 }
+
