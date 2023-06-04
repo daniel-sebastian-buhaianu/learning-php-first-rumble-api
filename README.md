@@ -11,8 +11,6 @@ Retrieves useful information about a Rumble channel.
 
 ## Description
 
-Provide a more detailed overview of your project, explaining its purpose and any relevant background information.
-
 Since I couldn't find a Rumble API to retrieve information about a particular Rumble Channel, I decided to build one.
 
 This simple Rumble API allows you to get useful data of a particular Rumble Channel, such a channel id, number of pages, useful information about all videos uploaded by that channel, and more!
