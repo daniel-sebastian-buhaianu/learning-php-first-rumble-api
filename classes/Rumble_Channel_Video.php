@@ -28,7 +28,7 @@ class Rumble_Channel_Video {
     	$this->title       = $this->get_title_from_xpath( $xpath );
     	$this->thumbnail   = $this->get_thumbnail_from_xpath( $xpath );
     	$this->uploaded_at = $this->get_uploaded_at_from_xpath( $xpath );
-    	$this->votes_up    = $this->get_votes_from_xpath( $xpath );
+    	$this->votes       = $this->get_votes_from_xpath( $xpath );
     	$this->counters    = $this->get_counters_from_xpath( $xpath); 
     }
 
