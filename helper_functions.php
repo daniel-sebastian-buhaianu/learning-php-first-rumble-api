@@ -67,38 +67,13 @@ function is_api_key_valid( $api_key ) {
     return password_verify( $api_key, MY_API_KEY );
 }
 
-function is_rumble_channel_url_valid( $url ) {
+function is_url_valid( $url ) {
 
-    $accepted_common_parts = [
-        'https://rumble.com/c/',
-        'https://www.rumble.com/c/',
-        'rumble.com/c/',
-        'www.rumble.com/c/'
-    ];
+    $headers = @get_headers( $url );
 
-    // Check if the URL starts with any of the accepted common parts
-    $starts_with_common_part = false;
-    foreach ( $accepted_common_parts as $common_part ) {
-
-        if ( strpos( $url, $common_part ) === 0 ) {
-
-            $starts_with_common_part = true;
-            break;
-        }
-    }
-    if ( !$starts_with_common_part ) {
-
-        return false;
+    if ( $headers && false !== strpos( $headers[0], '200' ) ) {
+        return true;
     }
 
-    // Get the channel ID part of the URL
-    $channel_id = substr( $url, strlen( $common_part ) );
-
-    // Check if the channel ID contains only alphanumeric characters
-    if ( ! preg_match( '/^[a-zA-Z0-9]+$/', $channel_id ) ) {
-
-        return false;
-    }
-
-    return true;
+    return false;
 }

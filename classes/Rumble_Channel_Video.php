@@ -2,18 +2,13 @@
 
 class Rumble_Channel_Video {
 
-	// unavailable in $this->get_all()
-	public $class_name = 'Rumble_Channel_Video';	
-
-	// available in $this->get_all()
+	private $class_name = 'Rumble_Channel_Video';	
 	private $url;       
     private $title;     
     private $thumbnail; 
     private $uploaded_at;
     private $votes;
     private $counters;
-
-	// unavailable in $this->get_all()
 	private $html;
 
 
@@ -67,7 +62,7 @@ class Rumble_Channel_Video {
 		}
 	}
 
-	public function get_all() {
+	public function get_core() {
 
 		return array(
 			'url'         => $this->url,

@@ -2,12 +2,9 @@
 
 class Rumble_Channel_Page {
 
-	// unavailable in $this->get_all;
 	private $class_name = 'Rumble_Channel_Page';
 	private $dom;
 	private $video_items;
-
-	// 'gettable' in $this->get_all;
 	private $url;
 	private $current_page_index;
 	private $last_page_index;
@@ -105,7 +102,7 @@ class Rumble_Channel_Page {
 		}
 	}
 
-	public function get_all() {
+	public function get_core() {
 
 		return array(
 			'url'                => $this->url,

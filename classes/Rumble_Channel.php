@@ -2,26 +2,41 @@
 
 class Rumble_Channel {
 
-	// unavailable in $this->get_all()
-	public $class_name = 'Rumble_Channel';
-
-	// available in $this->get_all()
+	private $class_name = 'Rumble_Channel';
 	private $url;
-	private $channel_id;
+	private $id;
 	private $pages_count;
 	private $pages_data;
+	private $is_valid;
 
+	public function __construct( $url ) {
 
-	public function __construct( $channel_url ) {
+		$this->is_valid = $this->is_channel_valid( $url );
 
-		$this->url         = $channel_url;
-		$this->channel_id  = is_rumble_channel_url_valid( $channel_url ) ? $this->get_channel_id( $channel_url ) : null;
-		$this->pages_count = $this->get_pages_count( $this->channel_id );
-		$this->pages_data  = $this->get_pages_data( $this->channel_id, $this->pages_count ); 
+		if ( false === $this->is_valid ) {
+			return;
+		} 
+
+		$this->url         = $url;
+		$this->id          = $this->get_id_from_url ( $url );
+		$this->pages_count = $this->get_pages_count( $this->id );
+		$this->pages_data  = $this->get_pages_data( $this->id, $this->pages_count );
+		return; 
 
 	}
 
 	// Methods
+
+	private function is_channel_valid( $url ) {
+
+		if ( ! is_url_valid( $url ) 
+			|| null === $this->get_id_from_url( $url ) ) {
+
+			return false;
+		}
+
+		return true;
+	}
 
 	public function get( $property ) {
 
@@ -33,8 +48,8 @@ class Rumble_Channel {
 			case 'url':
 				return $this->url;
 
-			case 'channel_id':
-				return $this->channel_id;
+			case 'id':
+				return $this->id;
 
 			case 'pages_count':
 				return $this->pages_count;
@@ -42,16 +57,19 @@ class Rumble_Channel {
 			case 'pages_data':
 				return $this->pages_data;
 
+			case 'is_valid':
+				return $this->is_valid;
+
 			default:
 				return "Property '$property' doesn't exist in " . $this->class_name;
 		}
 	}
 
-	public function get_all() {
+	public function get_core() {
 
 		return array(
-			'url'         => $this->url,
-			'channel_id'  => $this->channel_id,
+			'channel_url' => $this->url,
+			'channel_id'  => $this->id,
 			'pages_count' => $this->pages_count,
 			'pages_data'  => $this->pages_data,
 		);
@@ -61,12 +79,12 @@ class Rumble_Channel {
 
 		echo '<h3>' . $this->class_name . ' Properties</h3>';
 
-		echo '<h4>url</h4>';
+		echo '<h4>channel_url</h4>';
 		print_r( $this->url );
 		echo '<br><br>';
 
 		echo '<h4>channel_id</h4>';
-		print_r( $this->channel_id );
+		print_r( $this->id );
 		echo '<br><br>';
 
 		echo '<h4>pages_count</h4>';
@@ -82,28 +100,19 @@ class Rumble_Channel {
 
 	// Helpers
 
-	private function get_channel_id( $url ) {
+	private function get_id_from_url( $url ) {
 
-		$accepted_common_parts = [
-			'https://rumble.com/c/',
-			'https://www.rumble.com/c/',
-			'rumble.com/c/',
-			'www.rumble.com/c/'
-		];
+	    $url_parts = parse_url( $url );
 
-		$common_part = '';
-		foreach( $accepted_common_parts as $accepted_common_part ) {
+	    if ( ! isset( $url_parts['path'] ) ) {
+	        return null;
+	    }
 
-			if ( strpos( $url, $accepted_common_part ) === 0 ) {
+	    $path          = $url_parts['path'];
+	    $path_exploded = explode( '/', $path );
+	    $channel_id    = end( $path_exploded );
 
-				$common_part = $accepted_common_part;
-				break;
-			}
-		}
-		
-		$channel_id = str_replace( $common_part, '', $url );
-	  
-		return $channel_id;
+	    return $channel_id;
 	}
 
 	private function get_pages_count( $channel_id ) {
@@ -154,11 +163,11 @@ class Rumble_Channel {
 			$videos      = array();
 			foreach( $video_items as $video_item ) {
 
-				$video    = new Rumble_Channel_video( $video_item );
-				$videos[] = $video->get_all();
+				$video    = new Rumble_Channel_Video( $video_item );
+				$videos[] = $video->get_core();
 			}
 
-			$pages_data[ $page_url ] = $page->get_all();
+			$pages_data[ $page_url ] = $page->get_core();
 			$pages_data[ $page_url ]['videos_data'] = $videos; 
 		}
 
