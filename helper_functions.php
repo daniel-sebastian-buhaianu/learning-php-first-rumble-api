@@ -77,3 +77,74 @@ function is_url_valid( $url ) {
 
     return false;
 }
+
+function get_pages_data( $channel_id, $pages_count ) {
+
+    $pages_data  = array();
+
+    $channel_url = "https://rumble.com/c/$channel_id";
+
+    for ( $i = 1; $i <= $pages_count; $i++ ) {
+
+        $page_url = $i === 1 ? $channel_url : "$channel_url?page=$i";
+
+        $page = new Rumble_Channel_Page( $page_url );
+
+        $page->load_dom();
+        $page->load_video_items();
+        $page->load_last_page_index();
+
+        $video_items = $page->get( 'video_items' );
+        $videos      = array();
+        foreach( $video_items as $video_item ) {
+
+            $video    = new Rumble_Channel_Video( $video_item );
+            $videos[] = $video->get_core();
+        }
+
+        $pages_data[ $page_url ] = $page->get_core();
+        $pages_data[ $page_url ]['videos_data'] = $videos; 
+    }
+
+    return $pages_data;
+}
+
+function extract_pages_count() {
+
+    $count = null;
+
+    $channel_url = $this->url;
+
+    $url = $channel_url;
+
+    do {
+
+        $channel_page = new Rumble_Channel_Page( $url );
+
+        $channel_page->load_dom();
+        $channel_page->load_last_page_index();
+
+        $current_page_index = intval( $channel_page->get( 'current_page_index') ); 
+        $last_page_index    = intval( $channel_page->get( 'last_page_index' ) );
+
+        if ( $current_page_index - 1 === $last_page_index ) {
+
+            $count = $current_page_index;
+        }
+
+        $url = "$channel_url?page=$last_page_index";
+
+    } while ( null === $count );
+
+    return $count;
+}
+
+function remove_trailing_slash( $url ) {
+
+    if ( substr( $url, -1 ) === '/' ) {
+
+        $url = substr( $url, 0, -1 );  // Remove the last character (i.e., '/')
+    }
+    
+    return $url;
+}

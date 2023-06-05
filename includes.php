@@ -2,6 +2,9 @@
 
 include 'api_key.php';
 include 'helper_functions.php';
-include 'classes/Rumble_Channel.php';
-include 'classes/Rumble_Channel_Page.php';
-include 'classes/Rumble_Channel_Video.php';
+include 'classes/Channel.php';
+include 'classes/Page.php';
+include 'classes/Channel_Page.php';
+include 'classes/Channel_Page_About.php';
+include 'classes/Channel_Page_Videos.php';
+

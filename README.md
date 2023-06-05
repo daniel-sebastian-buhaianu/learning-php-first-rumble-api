@@ -1,6 +1,6 @@
-# Rumble API
+# Rumble Channel API
 
-Retrieves useful information about a Rumble channel.
+Retrieves useful information about any existent rumble channel.
 
 ## Table of Contents
 
@@ -11,11 +11,27 @@ Retrieves useful information about a Rumble channel.
 
 ## Description
 
-Since I couldn't find a Rumble API to retrieve information about a particular Rumble Channel, I decided to build one.
+Since I couldn't find a Rumble API to retrieve information 
+about a particular rumble channel, I decided to build one.
 
-This simple Rumble API allows you to get useful data of a particular Rumble Channel, such a channel id, number of pages, useful information about all videos uploaded by that channel, and more!
+This Rumble Channel API allows you to get useful data about
+any existent rumble channel, such as:
 
-All you need to do is provide the Rumble Channel URL, such as: https://rumble.com/c/TateSpeech
+- url 
+- id
+- banner image source
+- avatar image source
+- title
+- number of followers
+- about description
+- rumble joining date
+- number of videos uploaded
+- videos data
+
+... and more!
+
+All you need to do is provide a valid URL of an existent rumble
+channel, such as: https://rumble.com/c/TateSpeech
 
 ## Features
 
@@ -31,11 +47,7 @@ All you need to do is provide the Rumble Channel URL, such as: https://rumble.co
 
 ## Usage
 
-https://dsb99.app/rumble-api?api_key=YOUR_API_KEY&url=RUMBLE_CHANNEL_URL
-
-## Acknowledgments
-
-- Thanks to the PHP team for helping me code this using PHP.
+- In Progress...
 
 ## Contact
 

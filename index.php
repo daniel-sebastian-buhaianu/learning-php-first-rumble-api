@@ -23,7 +23,7 @@ if ( isset( $_GET['api_key'] ) ) {
    	 		exit;
 		}
 
-		$response = $rc->get_core();
+		$response = $rc->get_all();
 		header( 'HTTP/1.1 200 OK' );
 		header( 'Content-Type: application/json' );
 		echo json_encode( $response );
