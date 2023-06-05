@@ -35,15 +35,7 @@ channel, such as: https://rumble.com/c/TateSpeech
 
 ## Features
 
-- Allows you to get useful information about a particular Rumble Channel, such as:
-  - url
-  - channel_id
-  - pages_count
-  - pages_data
-    - page_url
-    - current_page_index
-    - last_page_index
-    - videos_data ( url, title, thumbnail, uploaded_at, likes, dislikes, views, comments )
+- In Progres...
 
 ## Usage
 
