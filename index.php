@@ -1,70 +1,58 @@
 <?php
 
-include 'includes.php';
+require 'includes.php';
 
-if ( isset( $_GET['api_key'] ) ) {
+if ( ! isset( $_GET['key'] ) ) {
 
-	if ( ! is_api_key_valid( $_GET['api_key'] ) ) {
-
-		$response = error_response( 401, 'Unauthorized access' );
-
-		echo json_encode( $response );
-   	 	exit;
-	}
-
-	if ( isset( $_GET['url'] ) ) {
-
-		$rc = new Rumble_Channel( $_GET['url'] );
-
-		if ( false === $rc->get( 'is_valid' ) ) {
-
-			$response = error_response( 404, 'Rumble Channel not found.' );
-			echo json_encode( $response );
-   	 		exit;
-		}
-
-		$response = $rc->get_all();
-		header( 'HTTP/1.1 200 OK' );
-		header( 'Content-Type: application/json' );
-		echo json_encode( $response );
-   	 	exit;
-
-	} else {
-
-		$response = error_response( 400, 'No url provided.' );
-
-		echo json_encode( $response );
-   	 	exit;
-	}
-} else {
-
-	$response = error_response( 401, 'Unauthorized access' );
-
+	$response = get_error_response( 401, "Missing query param 'key'" );
 	echo json_encode( $response );
 	exit;
+}
+
+if ( ! is_api_key_valid( $_GET['key'] ) ) {
+
+	$response = get_error_response( 401, 'Invalid API Key' );
+	echo json_encode( $response );
+ 	exit;
+}
+
+if ( ! isset( $_GET['url'] ) ) {
+
+	$response = get_error_response( 400, "Missing query param 'url'" );
+	echo json_encode( $response );
+ 	exit;
 
 }
 
-function error_response( $status_code, $message ) {
+if ( ! is_url_valid( $_GET['url'] ) ) {
 
-	switch( $status_code ) {
+	$response = get_error_response( 400, 'URL is invalid or inaccessible' );
+	echo json_encode( $response );
+ 	exit;
+}
 
-		case 400:
-			header( 'HTTP/1.1 400 Bad Request' );
-			break;
+$url = get_current_page_url();
 
-		case 401:
-			header( 'HTTP/1.1 401 Unauthorized' );
-			break;
+$url_parsed = parse_url( $url );
+$url_path   = remove_trailing_slash( $url_parsed['path'] );
 
-		default:
-			header( 'HTTP/1.1 404 Not Found' );
-	}
+switch ( $url_path ) {
 
-	header( 'Content-Type: application/json' );
+	case ROOT_PATH . '/channel':
+		require 'controllers/channel.php';
+		break;
 
-	return array(
-	    'error'   => true,
-	    'message' => $message
-	);
+	case ROOT_PATH . '/channel/about':
+		$ch_page = 'about';
+		require 'controllers/channel_page.php';
+		break;
+
+	case ROOT_PATH . '/channel/videos':
+		$ch_page = 'videos';
+		require 'controllers/channel_page.php';
+		break;
+
+	default:
+		require 'controllers/404.php';
+		break;
 }

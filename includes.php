@@ -1,6 +1,6 @@
 <?php
 
-include 'api_key.php';
+include 'config.php';
 include 'helper_functions.php';
 include 'classes/Channel.php';
 include 'classes/Page.php';

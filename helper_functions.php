@@ -148,3 +148,51 @@ function remove_trailing_slash( $url ) {
     
     return $url;
 }
+
+function get_current_page_url() {
+
+    $url;
+
+    if( isset( $_SERVER['HTTPS'] ) 
+        && 'on' === $_SERVER['HTTPS'] ) {
+
+        $url = "https://";
+
+    } else {
+
+         $url = "http://";
+
+    }
+
+    // Append the host(domain name, ip) to the URL.   
+    $url .= $_SERVER['HTTP_HOST'];   
+    
+    // Append the requested resource location to the URL   
+    $url .= $_SERVER['REQUEST_URI'];
+
+    return $url;    
+}
+
+function get_error_response( $status_code, $message ) {
+
+    switch( $status_code ) {
+
+        case 400:
+            header( 'HTTP/1.1 400 Bad Request' );
+            break;
+
+        case 401:
+            header( 'HTTP/1.1 401 Unauthorized' );
+            break;
+
+        default:
+            header( 'HTTP/1.1 404 Not Found' );
+    }
+
+    header( 'Content-Type: application/json' );
+
+    return array(
+        'error'   => true,
+        'message' => $message
+    );
+}
