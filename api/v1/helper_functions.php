@@ -1,5 +1,12 @@
 <?php
 
+function debug_print( $data ) {
+    echo '<pre>';
+    print_r( $data );
+    echo '</pre>';
+    return;
+}
+
 function dom_create_and_load( $html ) {
 
     $dom = new DOMDocument();
@@ -195,4 +202,44 @@ function get_error_response( $status_code, $message ) {
         'error'   => true,
         'message' => $message
     );
+}
+
+function send_success_response( $status_code, $response ) {
+
+    switch( $status_code ) {
+
+        case 201:
+            header( 'HTTP/1.1 201 Created' );
+            break;
+
+        case 202:
+            header( 'HTTP/1.1 202 Accepted' );
+            break;
+
+         case 204:
+            header( 'HTTP/1.1 203 No Content' );
+            break;
+
+        default:
+            header( 'HTTP/1.1 200 OK' );
+    }
+
+    header( 'Content-Type: application/json' );
+    echo json_encode( $response );
+    return;
+}
+
+function get_channel_id ( $channel_url ) {
+
+    $url_parts = parse_url( $channel_url );
+
+    if ( ! isset( $url_parts['path'] ) ) {
+        return null;
+    }
+
+    $path          = $url_parts['path'];
+    $path_exploded = explode( '/', $path );
+    $channel_id    = end( $path_exploded );
+
+    return $channel_id;
 }
