@@ -43,6 +43,8 @@ channel, such as: https://rumble.com/c/TateSpeech
 
 - https://dsb99.app/rumble/api/v1/channel?url=RUMBLE_CHANNEL_URL
 
+- https://dsb99.app/rumble/api/v1/channel/{channel_id}
+
 - https://dsb99.app/rumble/api/v1/channel/{channel_id}/about
 
 - https://dsb99.app/rumble/api/v1/channel/{channel_id}/videos
