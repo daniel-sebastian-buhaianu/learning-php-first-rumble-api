@@ -39,16 +39,13 @@ channel, such as: https://rumble.com/c/TateSpeech
 
 ## Usage
 
-- https://dsb99.app/rc-api/channel?key=YOUR_API_KEY&url=VALID_RUMBLE_CHANNEL_URL
-	- gets rumble channel general data
+- https://dsb99.app/rumble/api/v1
 
-- https://dsb99.app/rc-api/channel/about?key=YOUR_API_KEY&url=VALID_RUMBLE_CHANNEL_URL
-	- gets rumble channel about page data 
+- https://dsb99.app/rumble/api/v1/channel?url=RUMBLE_CHANNEL_URL
 
-- https://dsb99.app/rc-api/channel/videos?key=YOUR_API_KEY&url=VALID_RUMBLE_CHANNEL_URL
-	- gets rumble channel videos page data
+- https://dsb99.app/rumble/api/v1/channel/{channel_id}/about
 
-You can also pass rumble specific query parameters to the rumble channel url to sort/filter the videos result from a channel videos page, like: https://dsb99.app/rc-api/channel/videos?key=YOUR_API_KEY&url=VALID_RUMBLE_CHANNEL_URL?sort=views&date=this-year&duration=long
+- https://dsb99.app/rumble/api/v1/channel/{channel_id}/videos
 
 ## Contact
 
