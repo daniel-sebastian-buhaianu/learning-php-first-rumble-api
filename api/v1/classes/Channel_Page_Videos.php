@@ -50,6 +50,9 @@ class Channel_Page_Videos extends Channel_Page {
 	    	$dom   = dom_create_and_load( $html );
 	    	$xpath = new DOMXPath( $dom );
 
+	    	// store html element
+	    	$videos[ $i ]['html'] = $html;
+
 	    	// get video url
 		    $element = $xpath->query( '//a[@class="video-item--a"]' )->item(0);
 		    if ( $element ) {
