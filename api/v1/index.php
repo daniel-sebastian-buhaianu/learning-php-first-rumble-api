@@ -2,11 +2,11 @@
 
 require 'includes.php';
 
-$url = get_current_page_url();
+header('Access-Control-Allow-Origin: *');
 
+$url        = get_current_page_url();
 $url_parsed = parse_url( $url );
 $url_path   = remove_trailing_slash( $url_parsed['path'] );
-
 switch ( $url_path ) {
 
 	case ROOT_PATH:

@@ -39,7 +39,7 @@ channel, such as: https://rumble.com/c/TateSpeech
 
 ## Usage
 
-- https://dsb99.app/rumble/api/v1
+- https://dsb99.app/rumble/api/v1/
 
 - https://dsb99.app/rumble/api/v1/channel?url=RUMBLE_CHANNEL_URL
 

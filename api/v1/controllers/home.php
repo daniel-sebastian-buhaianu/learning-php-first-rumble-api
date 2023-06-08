@@ -1,6 +1,7 @@
 <?php
 
 $response = array(
+	'data' => null,
 	'prev' => null,
 	'next' => array(
 		'channel' => array( 'href' => BASE_URL.'/channel?url=RUMBLE_CHANNEL_URL' ),

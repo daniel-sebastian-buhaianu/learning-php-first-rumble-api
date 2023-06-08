@@ -31,7 +31,7 @@ if ( $url_path === $base_path ) {
 	$channel_id    = $channel->get( 'id' );
 	$channel_data  = $channel->get_all();
 	$response      = array( 
-		'channel' => $channel_data,
+		'data' => $channel_data,
 		'prev' => array( 'href' => BASE_URL ),
 		'next'    => array( 
 			'channel_about'  => array( 'href' => BASE_URL."/channel/$channel_id/about" ),
@@ -63,7 +63,7 @@ if ( $url_path === $base_path ) {
 
 			$channel_data = $channel->get_all();
 			$response     = array( 
-				'channel' => $channel_data,
+				'data' => $channel_data,
 				'prev'    => array( 'href' => BASE_URL ),
 				'next'    => array( 
 					'channel_about'  => array( 'href' => BASE_URL."/channel/$channel_id/about" ),
@@ -94,16 +94,16 @@ if ( $url_path === $base_path ) {
 
 					$ch_page_data = $ch_page_about->get_all();
 					$response   = array( 
-						'channel' => array( 'about' => $ch_page_data ),
-						'prev'    => array( 'channel' => array( 'href' => BASE_URL."/channel/$channel_id" ) ),
-						'next'    => array( 'channel_videos' => array( 'href' => BASE_URL."/channel/$channel_id/videos" ) ),
+						'data' => $ch_page_data,
+						'prev' => array( 'channel' => array( 'href' => BASE_URL."/channel/$channel_id" ) ),
+						'next' => array( 'channel_videos' => array( 'href' => BASE_URL."/channel/$channel_id/videos" ) ),
 					);
 					send_success_response( 200, $response );
 					exit;
 
 				} else {
 
-					$ch_page_videos = new Channel_Page_About( $channel_url );
+					$ch_page_videos = new Channel_Page_Videos( $channel_url );
 					if ( false === $ch_page_videos->is_page_valid() ) {
 
 						$response = get_error_response( 404, "Could not find an existent rumble channel at the url: $channel_url" );
@@ -113,9 +113,9 @@ if ( $url_path === $base_path ) {
 
 					$ch_page_data = $ch_page_videos->get_all();
 					$response     = array( 
-						'channel' => array( 'videos' => $ch_page_data ),
-						'prev'    => array( 'channel_about' => array( 'href' => BASE_URL."/channel/$channel_id/about" ) ),
-						'next'    => null,
+						'data' => $ch_page_data,
+						'prev' => array( 'channel_about' => array( 'href' => BASE_URL."/channel/$channel_id/about" ) ),
+						'next' => null,
 					);
 					send_success_response( 200, $response );
 					exit;
