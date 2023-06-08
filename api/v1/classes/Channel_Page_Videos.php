@@ -83,6 +83,17 @@ class Channel_Page_Videos extends Channel_Page {
 		    	$videos[ $i ]['thumbnail'] = null;
 		    }
 
+		    // get video duration
+		    $element = $xpath->query( '//span[@class="video-item--duration"]' )->item(0);
+		    if ( $element ) {
+
+		    	$videos[ $i ]['duration'] = $element->getAttribute('data-value');
+
+		    } else {
+
+		    	$videos[ $i ]['duration'] = null;
+		    }
+
 		    // get video uploaded_at
 		    $element = $xpath->query( '//time[@class="video-item--meta video-item--time"]' )->item(0);
 		    if ( $element ) {
