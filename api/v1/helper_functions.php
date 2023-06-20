@@ -69,6 +69,53 @@ function get_query_param( $url, $param ) {
     return null;
 }
 
+function get_query_params( $url ) {
+
+    $query = parse_url( $url, PHP_URL_QUERY );
+    parse_str( $query, $params );
+
+    return $params;
+}
+
+function remove_empty_query_params( $url ) {
+
+    $query = parse_url( $url, PHP_URL_QUERY );
+
+    if ( ! $query ) {
+
+        return $url; // No query parameters found, return the original URL
+    }
+
+    parse_str( $query, $params );
+
+    // Remove empty query parameters
+    $non_empty_params = array_filter( $params, function ( $param ) {
+        
+        return ( !empty( $param ) );
+    });
+
+    if ( empty( $non_empty_params ) ) {
+
+        return $url; // All query parameters were empty, return the original URL
+    }
+
+    $query_string = http_build_query( $non_empty_params );
+
+    $scheme   = parse_url( $url, PHP_URL_SCHEME );
+    $host     = parse_url( $url, PHP_URL_HOST );
+    $path     = parse_url( $url, PHP_URL_PATH );
+    $fragment = parse_url( $url, PHP_URL_FRAGMENT );
+
+    $new_url = $scheme . '://' . $host . $path . '?' . $query_string;
+
+    if ( $fragment ) {
+        
+        $new_url .= '#' . $fragment;
+    }
+
+    return $new_url;
+}
+
 function is_api_key_valid( $api_key ) {
 
     return password_verify( $api_key, MY_API_KEY );

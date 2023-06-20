@@ -103,6 +103,10 @@ if ( $url_path === $base_path ) {
 
 				} else {
 
+					$query_params = parse_url( $url, PHP_URL_QUERY );
+					$channel_url .= $query_params ? "?$query_params" : '';
+					$channel_url  = remove_empty_query_params($channel_url);
+
 					$ch_page_videos = new Channel_Page_Videos( $channel_url );
 					if ( false === $ch_page_videos->is_page_valid() ) {
 

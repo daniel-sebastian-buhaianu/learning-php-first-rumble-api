@@ -49,6 +49,9 @@ channel, such as: https://rumble.com/c/TateSpeech
 
 - https://dsb99.app/rumble/api/v1/channel/{channel_id}/videos
 
+- https://dsb99.app/rumble/api/v1/channel/{channel_id}/videos?page=2&sort=views&date=this-year&duration=long
+
+
 ## Contact
 
 - dsb99.dev@gmail.com
