@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ChannelController;
@@ -44,6 +45,14 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('role/{id}', 'show');
         Route::put('role/{id}', 'update');
         Route::delete('role/{id}', 'destroy');
+    });
+
+    // Users
+    Route::controller(UserController::class)->group(function () {
+        Route::get('user', 'index');
+        Route::get('user/{id}', 'show');
+        Route::put('user/{id}', 'update');
+        Route::delete('user/{id}', 'destroy');
     });
 
     // Channel

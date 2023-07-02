@@ -37,14 +37,14 @@ class RoleController extends Controller
      */
     public function show(Request $request, string $id)
     {
-        $model = Role::findOrFail($id);
+        $role = Role::findOrFail($id);
 
-        if ($request->user()->cannot('view', $model))
+        if ($request->user()->cannot('view', $role))
         {
             abort(403, 'Unauthorized');
         }
 
-        return $model;
+        return $role;
     }
 
     /**
