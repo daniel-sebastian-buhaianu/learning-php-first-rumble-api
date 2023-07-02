@@ -2,16 +2,19 @@
 
 namespace App\Services\PageScrapers\Rumble;
 
+use \DateTime;
 use \DOMXPath;
 use App\Helpers\UrlHelper as Url;
+use App\Helpers\StrHelper as Str;
 use App\Services\PageScrapers\Rumble\ChannelPage;
 use Illuminate\Support\Arr;
 
 class ChannelAboutPage extends ChannelPage
 {	
+	protected $rumble_id;
 	protected $description;
-	protected $joiningDate;
-	protected $videosCount;
+	protected $joining_date;
+	protected $videos_count;
 	protected $publicProperties;
 
 	public function __construct(string $url)
@@ -23,9 +26,10 @@ class ChannelAboutPage extends ChannelPage
 
 		parent::__construct($url);
 
+		$this->rumble_id = $this->getChannelId();
 		$this->publicProperties = array_merge(
 			$this->publicProperties, 
-			['description', 'joiningDate', 'videosCount']
+			[ 'rumble_id', 'description', 'joining_date', 'videos_count']
 		);
 
 		if ($this->isScrapable())
@@ -33,14 +37,39 @@ class ChannelAboutPage extends ChannelPage
 			$xpath = new DOMXPath($this->dom);
 			
 			$this->description = $this->extractDescription($xpath);
-			$this->joiningDate = $this->extractJoiningDate($xpath);
-			$this->videosCount = $this->extractVideosCount($xpath);
+			$this->joining_date = $this->extractJoiningDate($xpath);
+			$this->videos_count = $this->extractVideosCount($xpath);
 		}
 	}
 
 	public function getPublicProperties(): array
 	{
 		return $this->publicProperties;
+	}
+
+	public function convertVideosCountToInt(): void
+	{
+		$this->videos_count = intval(Str::getFirstWord($this->videos_count));
+	}
+
+	public function convertJoiningDateToMysqlDate(): void
+	{
+		// Remove the "Joined " part from the joining date
+        $dateString = str_replace("Joined ", "", $this->joining_date);
+
+        // Parse the date string
+        $dateTime = DateTime::createFromFormat('M d, Y', $dateString);
+
+        // Format the date as MySQL format
+        $this->joining_date = $dateTime->format('Y-m-d');
+	}
+
+	private function getChannelId()
+	{
+		// Pattern: https://rumble.com/c/{channel_id}/about
+		$pattern = "/https:\/\/rumble.com\/c\/(\w+)\/about/";
+
+		return preg_match($pattern, $this->url, $matches) ? $matches[1] : null;
 	}
 
 	private function extractDescription(DOMXPath $xpath): mixed

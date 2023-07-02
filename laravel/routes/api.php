@@ -40,10 +40,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::controller(ChannelController::class)->group(function () {
         Route::get('channel', 'index');
         Route::post('channel', 'store');
-        Route::get('channel/{id}', 'show');
-        Route::put('channel/{id}', 'update');
+        // Route::get('channel/{id}', 'show');
+        // Route::put('channel/{id}', 'update');
         Route::delete('channel/{id}', 'destroy');
-        Route::get('channel/search/{title}', 'search');
+        // Route::get('channel/search/{title}', 'search');
     });
 
     // // Video Category

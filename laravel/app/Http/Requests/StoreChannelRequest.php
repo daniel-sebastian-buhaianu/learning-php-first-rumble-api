@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\InexistentRumbleChannel;
+use App\Rules\ValidRumbleChannelUrl;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Validator;
 
@@ -37,7 +39,9 @@ class StoreChannelRequest extends FormRequest
                 'max:255',
                 'url',
                 'active_url',
-                'starts_with:https://rumble.com/c/,https://www.rumble.com/c/',
+                'starts_with:https://rumble.com/c/',
+                new ValidRumbleChannelUrl,
+                new InexistentRumbleChannel,
             ],
         ];
     }
@@ -51,6 +55,7 @@ class StoreChannelRequest extends FormRequest
     {
         return [
             'url.unique' => 'This channel already exists in the database.',
+            'url.starts_with' => 'Invalid rumble channel URL. It must start with: https://rumble.com/c/'
         ];
     }
 

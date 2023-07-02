@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\PageScrapers\Rumble\ChannelPage;
 use App\Services\PageScrapers\Rumble\ChannelAboutPage;
-use App\Services\PageScrapers\Rumble\ChannelVideosPage;
 use App\Models\Channel;
 use App\Http\Requests\StoreChannelRequest;
 use Illuminate\Http\Request;
@@ -25,7 +23,12 @@ class ChannelController extends Controller
      */
     public function store(StoreChannelRequest $request)
     {   
-        // Todo
+        $channel = new ChannelAboutPage($request->input('url'));
+        $channel->convertFollowersCountToInt();
+        $channel->convertJoiningDateToMysqlDate();
+        $channel->convertVideosCountToInt();
+
+        return Channel::create($channel->getAll());
     }
 
     /**
@@ -55,8 +58,8 @@ class ChannelController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Channel $channel)
+    public function destroy(string $id)
     {
-        //
+        return Channel::destroy($id);
     }
 }
