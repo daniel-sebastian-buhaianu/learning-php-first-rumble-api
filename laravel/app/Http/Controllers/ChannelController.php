@@ -34,25 +34,26 @@ class ChannelController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Channel $channel)
+    public function show(string $rumbleId)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Channel $channel)
-    {
-        //
+        return Channel::where('rumble_id', $rumbleId)->firstOrFail();
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Channel $channel)
+    public function update(Request $request, string $rumbleId)
     {
-        //
+        $channelUrl = 'https://rumble.com/c/'.$rumbleId;
+        $channel = new ChannelAboutPage($channelUrl);
+        $channel->convertFollowersCountToInt();
+        $channel->convertJoiningDateToMysqlDate();
+        $channel->convertVideosCountToInt();
+
+        $model = Channel::where('rumble_id', $rumbleId)->firstOrFail();
+        $model->update($channel->getAll());
+
+        return $model;
     }
 
     /**
@@ -61,5 +62,13 @@ class ChannelController extends Controller
     public function destroy(string $id)
     {
         return Channel::destroy($id);
+    }
+
+    /**
+     * Search the resource listings by title.
+     */
+    public function search(string $title)
+    {
+        return Channel::where('title', 'like', '%'.$title.'%')->get();
     }
 }

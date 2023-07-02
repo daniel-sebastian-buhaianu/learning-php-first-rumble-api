@@ -1,10 +1,11 @@
 <?php
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ChannelController;
 use App\Http\Controllers\VideoController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,14 +37,23 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::post('/logout', [AuthController::class, 'logout']);
 
+    // Roles
+    Route::controller(RoleController::class)->group(function () {
+        Route::get('role', 'index');
+        Route::post('role', 'store');
+        Route::get('role/{id}', 'show');
+        Route::put('role/{id}', 'update');
+        Route::delete('role/{id}', 'destroy');
+    });
+
     // Channel
     Route::controller(ChannelController::class)->group(function () {
         Route::get('channel', 'index');
         Route::post('channel', 'store');
-        // Route::get('channel/{id}', 'show');
-        // Route::put('channel/{id}', 'update');
-        Route::delete('channel/{id}', 'destroy');
-        // Route::get('channel/search/{title}', 'search');
+        Route::get('channel/{rumbleId}', 'show');
+        Route::put('channel/{rumbleId}', 'update');
+        Route::delete('channel/{rumbleId}', 'destroy');
+        Route::get('channel/search/{title}', 'search');
     });
 
     // // Video Category
