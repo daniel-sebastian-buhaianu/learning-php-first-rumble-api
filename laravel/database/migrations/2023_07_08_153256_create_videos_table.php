@@ -12,18 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('videos', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('channel_id');
-            $table->text('html');
+            $table->string('id', 128)->primary();
+            $table->string('channel_id', 64);
             $table->string('url', 255)->unique();
-            $table->string('title', 255)->unique();
+            $table->string('title', 255);
             $table->string('thumbnail', 255);
-            $table->string('duration', 15);
-            $table->dateTime('uploaded_at');
-            $table->unsignedBigInteger('likes_count')->nullable();
-            $table->unsignedBigInteger('dislikes_count')->nullable();
-            $table->unsignedBigInteger('views_count')->nullable();
-            $table->unsignedBigInteger('comments_count')->nullable();
+            $table->date('uploaded_at');
+            $table->unsignedBigInteger('likes_count')->default(0);
+            $table->unsignedBigInteger('dislikes_count')->default(0);
+            $table->unsignedBigInteger('comments_count')->default(0);
+            $table->text('description')->nullable();
             $table->timestamps();
 
             $table->foreign('channel_id')

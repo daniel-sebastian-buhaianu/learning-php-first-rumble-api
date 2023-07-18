@@ -5,16 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Video extends Model
+class Tag extends Model
 {
     use HasFactory;
-
-    /**
-     * Indicates if the model's ID is auto-incrementing.
-     *
-     * @var bool
-     */
-    public $incrementing = false;
 
     /**
      * The attributes that are not mass assignable.
@@ -23,8 +16,8 @@ class Video extends Model
      */
     protected $guarded = [];
 
-    public function tags()
+    public function videos()
     {
-        return $this->belongsToMany(App\Models\Tag::class, 'videos_tags');
+        return $this->belongsToMany(App\Models\Video::class, 'videos_tags');
     }
 }

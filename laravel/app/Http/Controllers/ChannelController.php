@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\PageScrapers\Rumble\ChannelAboutPage;
 use App\Models\Channel;
-use App\Http\Requests\StoreChannelRequest;
 use Illuminate\Http\Request;
-
+use App\Helpers\ConversionHelper as Convert;
+use Illuminate\Support\Facades\Validator;
+use App\Http\Requests\StoreChannelRequest;
+use App\Services\Scrapers\Rumble\ChannelAboutPage;
 
 class ChannelController extends Controller
 {
@@ -22,38 +23,39 @@ class ChannelController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(StoreChannelRequest $request)
-    {   
-        $channel = new ChannelAboutPage($request->input('url'));
-        $channel->convertFollowersCountToInt();
-        $channel->convertJoiningDateToMysqlDate();
-        $channel->convertVideosCountToInt();
+    {
+        $data = (new ChannelAboutPage($request->input('url')))->data();
 
-        return Channel::create($channel->getAll());
+        return Channel::create(
+            Convert::channelDataToDbSchema($data)
+        );     
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $rumbleId)
+    public function show(string $id)
     {
-        return Channel::where('rumble_id', $rumbleId)->firstOrFail();
+        $channel = Channel::findOrFail($id);
+
+        return $channel;
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $rumbleId)
+    public function update(string $id)
     {
-        $channelUrl = 'https://rumble.com/c/'.$rumbleId;
-        $channel = new ChannelAboutPage($channelUrl);
-        $channel->convertFollowersCountToInt();
-        $channel->convertJoiningDateToMysqlDate();
-        $channel->convertVideosCountToInt();
+        $channel = Channel::findOrFail($id);
 
-        $model = Channel::where('rumble_id', $rumbleId)->firstOrFail();
-        $model->update($channel->getAll());
-
-        return $model;
+        $url = 'https://rumble.com/c/' . $id;
+        $data = (new ChannelAboutPage($url))->data();
+        
+        $channel->update(
+            Convert::channelDataToDbSchema($data)
+        );
+       
+        return $channel;
     }
 
     /**
@@ -61,7 +63,12 @@ class ChannelController extends Controller
      */
     public function destroy(string $id)
     {
-        return Channel::destroy($id);
+        if (Channel::destroy($id))
+        {
+            return 'deleted';
+        }
+
+        return 'could not delete';
     }
 
     /**

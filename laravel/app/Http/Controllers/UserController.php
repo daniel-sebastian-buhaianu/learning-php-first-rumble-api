@@ -13,8 +13,7 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->user()->cannot('viewAny', User::class))
-        {
+        if ($request->user()->cannot('viewAny', User::class)) {
             abort(403, 'Unauthorized');
         }
 
@@ -28,8 +27,7 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
 
-        if ($request->user()->cannot('view', $user))
-        {
+        if ($request->user()->cannot('view', $user)) {
             abort(403, 'Unauthorized');
         }
 
@@ -52,14 +50,13 @@ class UserController extends Controller
             'email' => $email,
         ]);
 
-        if ($request->user()->can('updateUserRole', User::class))
-        {
+        if ($request->user()->can('updateUserRole', User::class)) {
             $user->update([
                 'role_id' => intval($role_id)
             ]);
         }
 
-        return $user;     
+        return $user;
     }
 
     /**
@@ -69,8 +66,7 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
 
-        if ($request->user()->cannot('delete', $user))
-        {
+        if ($request->user()->cannot('delete', $user)) {
             abort(403, 'Unauthorized');
         }
 

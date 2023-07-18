@@ -14,8 +14,7 @@ class RoleController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->user()->cannot('viewAny', Role::class))
-        {
+        if ($request->user()->cannot('viewAny', Role::class)) {
             abort(403, 'Unauthorized');
         }
 
@@ -39,8 +38,7 @@ class RoleController extends Controller
     {
         $role = Role::findOrFail($id);
 
-        if ($request->user()->cannot('view', $role))
-        {
+        if ($request->user()->cannot('view', $role)) {
             abort(403, 'Unauthorized');
         }
 
@@ -53,12 +51,12 @@ class RoleController extends Controller
     public function update(UpdateRoleRequest $request, string $id)
     {
         $role = Role::findOrFail($id);
-        
+
         $role->update([
             'name' => $request->input('name')
         ]);
 
-        return $role; 
+        return $role;
     }
 
     /**
@@ -68,8 +66,7 @@ class RoleController extends Controller
     {
         $role = Role::findOrFail($id);
 
-        if ($request->user()->cannot('delete', $role))
-        {
+        if ($request->user()->cannot('delete', $role)) {
             abort(403, 'Unauthorized');
         }
 

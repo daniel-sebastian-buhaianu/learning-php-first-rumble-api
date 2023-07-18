@@ -1,12 +1,9 @@
 <?php
 
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\RoleController;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\ChannelController;
-use App\Http\Controllers\VideoController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ChannelController;
+use App\Http\Controllers\VideoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,63 +21,23 @@ use Illuminate\Support\Facades\Route;
 | Public Routes
 |--------------------------------------------------------------------------
 */
-Route::controller(AuthController::class)->group(function () {
-    Route::post('/register', 'register');
-    Route::post('/login', 'login');
-});
+Route::get('/channel', [ChannelController::class, 'index']);
+Route::post('/channel', [ChannelController::class, 'store']);
+Route::get('/channel/{id}', [ChannelController::class, 'show']);
+Route::put('/channel/{id}', [ChannelController::class, 'update']);
+Route::delete('/channel/{id}', [ChannelController::class, 'destroy']);
+Route::get('/channel/search/{title}', [ChannelController::class, 'search']);
+
+Route::get('/video', [VideoController::class, 'index']);
+Route::post('/video', [VideoController::class, 'store']);
+// Route::get('/video/{id}', [VideoController::class, 'show']);
+// Route::put('/video/{id}', [VideoController::class, 'update']);
+// Route::delete('/video/{id}', [VideoController::class, 'destroy']);
+// Route::get('/video/search/{title}', [VideoController::class, 'search']);
 
 /*
 |--------------------------------------------------------------------------
 | Protected Routes
 |--------------------------------------------------------------------------
 */
-Route::middleware(['auth:sanctum'])->group(function () {
-
-    Route::post('/logout', [AuthController::class, 'logout']);
-
-    // Roles
-    Route::controller(RoleController::class)->group(function () {
-        Route::get('role', 'index');
-        Route::post('role', 'store');
-        Route::get('role/{id}', 'show');
-        Route::put('role/{id}', 'update');
-        Route::delete('role/{id}', 'destroy');
-    });
-
-    // Users
-    Route::controller(UserController::class)->group(function () {
-        Route::get('user', 'index');
-        Route::get('user/{id}', 'show');
-        Route::put('user/{id}', 'update');
-        Route::delete('user/{id}', 'destroy');
-    });
-
-    // Channel
-    Route::controller(ChannelController::class)->group(function () {
-        Route::get('channel', 'index');
-        Route::post('channel', 'store');
-        Route::get('channel/{rumbleId}', 'show');
-        Route::put('channel/{rumbleId}', 'update');
-        Route::delete('channel/{rumbleId}', 'destroy');
-        Route::get('channel/search/{title}', 'search');
-    });
-
-    // // Video Category
-    // Route::controller(VideoCategoryController::class)->group(function () {
-    //     Route::get('/video-category', 'index');
-    //     Route::post('/video-category', 'store')->middleware('can:create,App\Models\VideoCategory');
-    //     Route::get('/video-category/{id}', 'show');
-    //     Route::put('/video-category/{id}', 'update')->middleware('can:update,App\Models\VideoCategory');
-    //     Route::delete('/video-category/{id}', 'destroy')->middleware('can:delete,App\Models\VideoCategory');
-    //     Route::get('/video-category/search/{name}', 'search');
-    // });
-
-    // // Rumble Video
-    // Route::controller(RumbleVideoController::class)->group(function () {
-    //  Route::get('/rumble-video', 'index');
-    //  Route::post('/rumble-video', 'store')->middleware('can:create,App\Models\RumbleVideo');
-    //  Route::get('/rumble-video/{id}', 'show');
-    //  Route::put('/rumble-video/{id}', 'update')->middleware('can:update,App\Models\RumbleVideo');
-    //  Route::delete('/rumble-video/{id}', 'destroy')->middleware('can:delete,App\Models\RumbleVideo');
-    //  Route::get('/rumble-video/search/{name}', 'search');
-});
+// Route::middleware(['auth:sanctum'])->group(function () {});

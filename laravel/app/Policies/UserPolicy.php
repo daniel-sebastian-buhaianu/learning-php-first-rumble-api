@@ -20,7 +20,7 @@ class UserPolicy
      */
     public function view(User $user, User $model): bool
     {
-        return $user->role_id > 1 
+        return $user->role_id > 1
                 || $user->role_id === $model->role_id;
     }
 
